@@ -13,7 +13,7 @@ RUN python -m venv /py && \
     /py/bin/pip install -r /tmp/requirements.txt && \
     rm -rf /tmp && \
     adduser \
-        --disabled password \
+        --disabled-password \
         --no-create-home \
         django-user
 
