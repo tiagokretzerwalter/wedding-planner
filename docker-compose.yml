@@ -8,5 +8,7 @@ services:
       - "8000:8000"
     volumes:
       - ./app:/app
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"

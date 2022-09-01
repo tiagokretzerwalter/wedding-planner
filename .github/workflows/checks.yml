@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v3
       - name: Test
         run: |
-            docker-compose run -e SECRET_KEY='test' --rm app sh -c "python manage.py test"
+            docker-compose run --rm app sh -c "python manage.py test"
       - name: Lint
         run: |
-            docker-compose run -e SECRET_KEY='test' --rm app sh -c "flake8"
+            docker-compose run --rm app sh -c "flake8"
