@@ -11,13 +11,13 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         with:
-          username: ${{ secrets.DOCKERHUB_TIAGO }}
-          password: ${{ secrets.DOCKERHUB_TIAGO_TOKEN }}
+          username: ${{secrets.DOCKERHUB_TIAGO}}
+          password: ${{secrets.DOCKERHUB_TIAGO_TOKEN}}
       - name: Checkout
         uses: actions/checkout@v3
       - name: Test
         env:
-          SECRET_KEY: ${{ secrets.DOCKERHUB_TIAGO_TOKEN }}
+          SECRET_KEY: h8f2#mbjq7w68=^rpv53*!iixpa6o_+*5n7)#ug7s4l@@xlf52
         run: |
             docker-compose run --rm app sh -c "python manage.py test"
       - name: Lint
