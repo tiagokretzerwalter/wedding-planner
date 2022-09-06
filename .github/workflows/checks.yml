@@ -13,13 +13,6 @@ jobs:
         with:
           username: ${{secrets.DOCKERHUB_USER}}
           password: ${{secrets.DOCKERHUB_TOKEN}}
-      - name: Environment Variables
-        run: |
-          echo "DB_USER=postgres" >> .env
-          echo "DB_NAME=postgres" >> .env
-          echo "PGADMIN_DEFAULT_EMAIL=test@test.com" >> .env
-          echo "PGADMIN_DEFAULT_PASSWORD=test" >> .env
-          echo "DB_PASSWORD=postgres" >> .env
       - name: Checkout
         uses: actions/checkout@v3
       - name: Test
@@ -28,6 +21,3 @@ jobs:
       - name: Lint
         run: |
             docker-compose run --rm app sh -c "flake8"
-      - name: Delete .env
-        run: |
-          rm .env
