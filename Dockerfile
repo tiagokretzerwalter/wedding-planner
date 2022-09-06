@@ -13,13 +13,17 @@ EXPOSE 8000
 ARG DEV=false
 RUN python -m venv /py
 ENV PATH="/py/bin:$PATH"
-
-RUN pip install --upgrade pip && \
+RUN apk add --update --no-cache postgresql-client && \
+    apk add --no-cache --virtual .build-deps \
+        gcc \
+        musl-dev \
+        postgresql-dev && \
     pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
         then pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     rm -rf /tmp && \
+    apk del --no-cache .build-deps && \
     adduser \
         --disabled-password \
         django-user
