@@ -27,18 +27,9 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: "postgres"
     ports:
-      - "5432"
+      - "15432:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 5s
       timeout: 5s
       retries: 5
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      PGADMIN_DEFAULT_EMAIL: "test@test.com"
-      PGADMIN_DEFAULT_PASSWORD: "postgres"
-    ports:
-      - "80"
-    depends_on:
-      - db
