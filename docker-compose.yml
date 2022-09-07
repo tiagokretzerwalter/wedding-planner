@@ -1,12 +1,12 @@
 services:
   db:
-      image: postgres
+      image: postgres:14-alpine
       environment:
         - POSTGRES_DB=postgres
         - POSTGRES_USER=postgres
         - POSTGRES_PASSWORD=postgres
       volumes:
-        - ./data/db:/var/lib/postgresql/data
+        - db-data:/var/lib/postgresql/data
       ports:
         - "15432:5432"
       healthcheck:
@@ -14,20 +14,6 @@ services:
         interval: 5s
         timeout: 5s
         retries: 5
-      networks:
-        - djangonetwork
-  pgadmin:
-      image: dpage/pgadmin4
-      environment:
-        - PGADMIN_DEFAULT_EMAIL=postgres@test.com
-        - PGADMIN_DEFAULT_PASSWORD=postgres
-      ports:
-        - "16543:80"
-      depends_on:
-        db:
-          condition: service_healthy
-      networks:
-        - djangonetwork
   app:
     build:
       context: .
@@ -39,16 +25,14 @@ services:
       - ./app:/app
     environment:
       - SECRET_KEY=${SECRET_KEY}
-      - POSTGRES_DB=postgres
+      - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+      - POSTGRES_HOST=db
     depends_on:
       db:
         condition: service_healthy
-    networks:
-      - djangonetwork
     command: >
       sh -c "python manage.py runserver 0.0.0.0:8000"
-networks: 
-  djangonetwork:
-    driver: bridge
+volumes:
+  db-data:
