@@ -19,9 +19,9 @@ services:
       db:
         condition: service_healthy
   db:
-    image: postgres
+    image: postgres:14-alpine
     volumes:
-      - ./data/db:/var/lib/postgresql/data
+      - data-db:/var/lib/postgresql/data
     environment:
       POSTGRES_DB: postgres
       POSTGRES_USER: postgres
@@ -33,3 +33,6 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+
+volumes:
+  data-db:
