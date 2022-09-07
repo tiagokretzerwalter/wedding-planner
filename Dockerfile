@@ -14,12 +14,16 @@ ARG DEV=false
 RUN python -m venv /py
 ENV PATH="/py/bin:$PATH"
 
-RUN pip install --upgrade pip && \
+RUN \
+    apk add --no-cache postgresql-libs && \
+    apk add --no-cache --virtual .build-deps gcc musl-dev postgresql-dev && \
+    pip install --upgrade pip && \
     pip install -r /tmp/requirements.txt && \
     if [ $DEV = "true" ]; \
         then pip install -r /tmp/requirements.dev.txt ; \
     fi && \
     rm -rf /tmp && \
+    apk --purge del .build-deps && \
     adduser \
         --disabled-password \
         django-user
