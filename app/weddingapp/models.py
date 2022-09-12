@@ -22,16 +22,23 @@ class UserManager(BaseUserManager):
 
         return user
 
+    def get_by_natural_key(self, username):
+        """Make username case insensitive"""
+        case_insensitive_username_field = '{}__iexact'.format(
+            self.model.USERNAME_FIELD)
+
+        return self.get(**{case_insensitive_username_field: username})
+
 
 class User(AbstractBaseUser, PermissionsMixin):
     """User in the system"""
     username = models.CharField(
-        db_collation="ci"
         "first name + last name",
-        max_length=150, unique=True,
+        unique=True,
+        max_length=150,
         help_text="It is the combination of the guest's first and last name"
     )
-    email = models.EmailField(max_length=255, unique=True)
+    email = models.EmailField(max_length=255, unique=True, db_index=False)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     is_staff = models.BooleanField(default=False)
