@@ -12,11 +12,11 @@ from django.contrib.auth.models import (
 class UserManager(BaseUserManager):
     """Manager for users"""
 
-    def create_user(self, username, password=None, **extra_fields):
+    def create_user(self, username, password=None, email=None, **extra_fields):
         """
         Create, save and return a new user with given username and password
         """
-        user = self.model(username=username, **extra_fields)
+        user = self.model(username=username, email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
 
