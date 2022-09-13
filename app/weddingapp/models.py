@@ -16,6 +16,8 @@ class UserManager(BaseUserManager):
         """
         Create, save and return a new user with given username and password
         """
+        if not username:
+            raise ValueError("Please provide an username.")
         user = self.model(username=username, email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)

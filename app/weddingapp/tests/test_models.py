@@ -30,6 +30,11 @@ class ModelTests(TestCase):
             [None, ""]
         ]
         for email, expected in sample_emails:
-            user = get_user_model().objects.create_user(f'user{email}', "password", email=email)
+            user = get_user_model().objects.create_user(
+                f'user{email}', "password", email=email)
             self.assertEqual(user.email, expected)
-#It doesn't lowercase the first part because the capitalization of the first part of the email address is unique. Most of the email providers do not allow two email addresses with the same text, but different capitalization. But we don't know which system the user is using.
+
+    def test_new_user_without_username_raises_error(self):
+        """Test that creating a user without an username raises a ValueError"""
+        with self.assertRaises(ValueError):
+            get_user_model().objects.create_user("", "password")
