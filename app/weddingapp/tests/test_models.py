@@ -1,6 +1,7 @@
 """
 Tests for models
 """
+from sqlite3 import IntegrityError
 from django.test import TestCase
 from django.contrib.auth import get_user_model
 
@@ -8,17 +9,34 @@ from django.contrib.auth import get_user_model
 class ModelTests(TestCase):
     """ Test models"""
 
-    def test_create_user_with_username_successful(self):
-        """Test creating a user with the username is successful"""
+    def create_user_helper(self):
+        """Helper method for creating a new user"""
         username = 'testuser'
         password = 'password'
         user = get_user_model().objects.create_user(
             username=username,
             password=password
         )
+        return user
 
-        self.assertEqual(user.username, username)
-        self.assertTrue(user.check_password(password))
+    def test_create_user_with_username_successful(self):
+        """Test creating a user with the username is successful"""
+        user = self.create_user_helper()
+
+        self.assertEqual(user.username, "testuser")
+        self.assertTrue(user.check_password("password"))
+
+    def test_username_is_case_insensitive(self):
+        """Test username is case insensitive for new users"""
+        user = self.create_user_helper()
+        users = ['TestUser', 'TESTUSER', 'Testuser']
+
+        for user in users:
+            get_user_model().objects.create_user(
+                username=user,
+                password="password"
+            )
+            self.assertRaises(IntegrityError)
 
     def test_new_user_email_normalized(self):
         """Test email is normalized for new users"""
