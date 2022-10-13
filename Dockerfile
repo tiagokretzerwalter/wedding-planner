@@ -11,6 +11,7 @@ WORKDIR /app
 EXPOSE 8000
 
 ARG DEV=false
+ARG COMPOSEDEBUG=false
 RUN python -m venv /py
 ENV PATH="/py/bin:$PATH"
 
@@ -22,7 +23,9 @@ RUN \
     if [ $DEV = "true" ]; \
         then pip install -r /tmp/requirements.dev.txt ; \
     fi && \
-    rm -rf /tmp && \
+    if [ $COMPOSEDEBUG = "false" ]; \
+        then rm -rf /tmp ; \
+    fi && \
     apk --purge del .build-deps && \
     adduser \
         --disabled-password \
