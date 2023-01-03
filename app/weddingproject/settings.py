@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'weddingapp.apps.WeddingappConfig',
     'rest_framework',
     'drf_spectacular',
+    'user',
 ]
 
 MIDDLEWARE = [
